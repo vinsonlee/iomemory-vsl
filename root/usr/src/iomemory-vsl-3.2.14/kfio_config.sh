@@ -1617,7 +1617,7 @@ void kfioc_has_inflight_rw_atomic(void)
 }
 '
 
-    kfioc_test "$test_code" "$test_flag" 1 -Werror
+    kfioc_test "$test_code" "$test_flag" 1 "-Werror -Wframe-larger-than=2048"
 }
 
 # flag:           KFIOC_HAS_BLK_LIMITS_IO_MIN
