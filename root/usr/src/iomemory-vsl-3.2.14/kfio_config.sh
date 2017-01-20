@@ -2100,8 +2100,9 @@ KFIOC_MAKE_REQUEST_FN_VOID()
     local test_flag="$1"
     local test_code='
 #include <linux/blkdev.h>
-static void my_make_request_fn(struct request_queue *q, struct bio *bio)
+static blk_qc_t my_make_request_fn(struct request_queue *q, struct bio *bio)
 {
+    return BLK_QC_T_NONE;
 }
 void test_make_request_fn(void)
 {

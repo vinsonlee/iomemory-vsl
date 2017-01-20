@@ -351,7 +351,7 @@ enum {
 #if !defined(__VMKLNX__)
 static struct request_queue *kfio_alloc_queue(struct kfio_disk *dp, kfio_numa_node_t node);
 #if KFIOC_MAKE_REQUEST_FN_VOID
-static void kfio_make_request(struct request_queue *queue, struct bio *bio);
+static blk_qc_t kfio_make_request(struct request_queue *queue, struct bio *bio);
 #else
 static int kfio_make_request(struct request_queue *queue, struct bio *bio);
 #endif
@@ -1708,8 +1708,8 @@ static struct bio *kfio_add_bio_to_plugged_list(void *data, struct bio *bio)
 #endif
 
 #if KFIOC_MAKE_REQUEST_FN_VOID
-static void kfio_make_request(struct request_queue *queue, struct bio *bio)
-#define FIO_MFN_RET
+static blk_qc_t kfio_make_request(struct request_queue *queue, struct bio *bio)
+#define FIO_MFN_RET BLK_QC_T_NONE;
 #else
 static int kfio_make_request(struct request_queue *queue, struct bio *bio)
 #define FIO_MFN_RET 0
@@ -2028,7 +2028,7 @@ static void kfio_elevator_change(struct request_queue *q, char *name)
 
 #if KFIOC_HAS_BIO_COMP_CPU
 #if KFIOC_MAKE_REQUEST_FN_VOID
-static void kfio_rq_make_request_fn(struct request_queue *q, struct bio *bio)
+static blk_qc_t kfio_rq_make_request_fn(struct request_queue *q, struct bio *bio)
 #else
 static int kfio_rq_make_request_fn(struct request_queue *q, struct bio *bio)
 #endif
@@ -2039,7 +2039,7 @@ static int kfio_rq_make_request_fn(struct request_queue *q, struct bio *bio)
     {
         __kfio_bio_complete(bio, 0, -EIO);
 #if KFIOC_MAKE_REQUEST_FN_VOID
-        return;
+        return BLK_QC_T_NONE;
 #else
         return 0;
 #endif
@@ -2051,7 +2051,7 @@ static int kfio_rq_make_request_fn(struct request_queue *q, struct bio *bio)
     }
 
 #if KFIOC_MAKE_REQUEST_FN_VOID
-    disk->make_request_fn(q, bio);
+    return disk->make_request_fn(q, bio);
 #else
     return disk->make_request_fn(q, bio);
 #endif
