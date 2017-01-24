@@ -1391,7 +1391,7 @@ KFIOC_MODULE_PARAM_ARRAY_NUMP()
 {
     local test_flag="$1"
     local test_code='
-const char *test[10];
+char *test[10];
 
 module_param_array(test, charp, NULL, 0);
 '
