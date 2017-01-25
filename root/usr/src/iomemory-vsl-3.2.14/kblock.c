@@ -537,7 +537,12 @@ int kfio_create_disk(struct fio_device *dev, kfio_pci_dev_t *pdev, uint32_t sect
      * We set REQ_FUA and REQ_FLUSH to ensure ordering (barriers) and to flush (on non-powercut cards).
      * Note on REQ_FUA: "strict_sync=1" needs to be set or this is ignored on cards w/o powercut support.
      */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,7,0)
+    queue_flag_set(QUEUE_FLAG_FUA, rq);
+    queue_flag_set(QUEUE_FLAG_WC, rq);
+#else
     rq->flush_flags = REQ_FUA | REQ_FLUSH;
+#endif
 #elif KFIOC_BARRIER == 1
     // Ignore if ordered mode is wrong - linux will complain
     blk_queue_ordered(rq, iodrive_barrier_type, kfio_prepare_flush);
