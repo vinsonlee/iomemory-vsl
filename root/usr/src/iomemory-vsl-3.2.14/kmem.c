@@ -773,7 +773,11 @@ void kfio_put_user_pages(fusion_user_page_t *pages, int nr_pages)
         {
             break;
         }
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
+        put_page((struct page *)pages[i]);
+#else
         page_cache_release((struct page *)pages[i]);
+#endif
     }
 }
 

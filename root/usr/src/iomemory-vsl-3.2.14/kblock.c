@@ -496,7 +496,11 @@ int kfio_create_disk(struct fio_device *dev, kfio_pci_dev_t *pdev, uint32_t sect
 # endif
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
+    blk_queue_max_segment_size(rq, PAGE_SIZE);
+#else
     blk_queue_max_segment_size(rq, PAGE_CACHE_SIZE);
+#endif
 
 #if KFIOC_HAS_BLK_QUEUE_HARDSECT_SIZE
     blk_queue_hardsect_size(rq, sector_size);
