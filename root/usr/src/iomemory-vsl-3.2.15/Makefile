@@ -65,11 +65,11 @@ clean modules_clean:
 	rm -rf include/fio/port/linux/kfio_config.h kfio_config
 
 include/fio/port/linux/kfio_config.h: kfio_config.sh
-	./$< -a $(FIOARCH) -o $@ -k $(KERNEL_SRC) -p -d $(CURDIR)/kfio_config -l $(FUSION_DEBUG)
+	/bin/sh $< -a $(FIOARCH) -o $@ -k $(KERNEL_SRC) -p -d $(CURDIR)/kfio_config -l $(FUSION_DEBUG)
 
 .PHONY: check_target_kernel
 check_target_kernel:
-	@ret="$$(./check_target_kernel.sh "$(KERNELVER)" "$(KERNEL_SRC)")" ; \
+	@ret="$$(/bin/sh check_target_kernel.sh "$(KERNELVER)" "$(KERNEL_SRC)")" ; \
 	if [ -n "$$ret" ] ; then \
 		echo "" ; \
 		echo "Change found in target kernel: $$ret" ; \
