@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 # Copyright (c) 2006-2014, Fusion-io, Inc.(acquired by SanDisk Corp. 2014)
-# Copyright (c) 2014-2015 SanDisk Corp. and/or all its affiliates. All rights reserved.
+# Copyright (c) 2014-2016 SanDisk Corp. and/or all its affiliates. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -159,6 +159,7 @@ KFIOC_HAS_FILE_INODE_HELPER
 KFIOC_HAS_CPUMASK_WEIGHT
 KFIOC_BIO_HAS_USCORE_BI_CNT
 KFIOC_BIO_ENDIO_REMOVED_ERROR
+KFIOC_MAKE_REQUEST_FN_UINT
 "
 
 
@@ -1610,9 +1611,9 @@ KFIOC_HAS_INFLIGHT_RW_ATOMIC()
     local test_code='
 #include <linux/blkdev.h>
 #include <linux/atomic.h>
+struct gendisk gd;
 void kfioc_has_inflight_rw_atomic(void)
 {
-    struct gendisk gd;
     atomic_set(&gd.part0.in_flight[0], 0);
 }
 '
@@ -2457,6 +2458,27 @@ void kfioc_bio_endio_removed_error(void) {
 '
     kfioc_test "$test_code" "$test_flag" 1
 }
+
+# flag:          KFIOC_MAKE_REQUEST_FN_UINT
+# usage:         1   make_request_fn returns unsigned int
+#                0   It returns 0/1 for done/remap
+KFIOC_MAKE_REQUEST_FN_UINT()
+{
+    local test_flag="$1"
+    local test_code='
+#include <linux/blkdev.h>
+static unsigned int my_make_request_fn(struct request_queue *q, struct bio *bio)
+{
+    return 1;
+}
+void test_make_request_fn(void)
+{
+    blk_queue_make_request(NULL, my_make_request_fn);
+}
+'
+    kfioc_test "$test_code" "$test_flag" 1 -Werror
+}
+
 
 ###############################################################################
 

@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------------------
- * Copyright (c) 2016, Fusion-io, Inc. (acquired by SanDisk Corp. 2014)
+ * Copyright (c) 2017, Fusion-io, Inc. (acquired by SanDisk Corp. 2014)
  * Copyright (c) 2014 SanDisk Corp. and/or all its affiliates.
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without

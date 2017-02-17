@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // Copyright (c) 2006-2014, Fusion-io, Inc.(acquired by SanDisk Corp. 2014)
-// Copyright (c) 2014-2015 SanDisk Corp. and/or all its affiliates. All rights reserved.
+// Copyright (c) 2014-2016 SanDisk Corp. and/or all its affiliates. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -352,6 +352,8 @@ enum {
 static struct request_queue *kfio_alloc_queue(struct kfio_disk *dp, kfio_numa_node_t node);
 #if KFIOC_MAKE_REQUEST_FN_VOID
 static void kfio_make_request(struct request_queue *queue, struct bio *bio);
+#elif KFIOC_MAKE_REQUEST_FN_UINT
+static unsigned int kfio_make_request(struct request_queue *queue, struct bio *bio);
 #else
 static int kfio_make_request(struct request_queue *queue, struct bio *bio);
 #endif
@@ -1710,6 +1712,9 @@ static struct bio *kfio_add_bio_to_plugged_list(void *data, struct bio *bio)
 #if KFIOC_MAKE_REQUEST_FN_VOID
 static void kfio_make_request(struct request_queue *queue, struct bio *bio)
 #define FIO_MFN_RET
+#elif KFIOC_MAKE_REQUEST_FN_UINT
+static unsigned int kfio_make_request(struct request_queue *queue, struct bio *bio)
+#define FIO_MFN_RET 0
 #else
 static int kfio_make_request(struct request_queue *queue, struct bio *bio)
 #define FIO_MFN_RET 0

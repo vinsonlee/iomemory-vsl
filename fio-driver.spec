@@ -1,4 +1,4 @@
-%define fio_version        3.2.14.1675
+%define fio_version        3.2.14.1677
 %define fio_sysconfdir     /etc
 %define fio_oem_name       fusionio
 %define fio_oem_name_short fio
@@ -328,14 +328,14 @@ Source to build driver for SanDisk Fusion ioMemory devices
 /usr/src/iomemory-vsl-3.2.14/include/fio/port/linux/ktypes.h
 /usr/src/iomemory-vsl-3.2.14/include/fio/port/linux/utypes.h
 /usr/src/iomemory-vsl-3.2.14/include/fio/port/gcc/align.h
-/usr/src/iomemory-vsl-3.2.14/kfio/.x86_64_cc48_libkfio.o.cmd
-/usr/src/iomemory-vsl-3.2.14/kfio/x86_64_cc48_libkfio.o_shipped
+/usr/src/iomemory-vsl-3.2.14/kfio/.x86_64_cc53_libkfio.o.cmd
+/usr/src/iomemory-vsl-3.2.14/kfio/x86_64_cc53_libkfio.o_shipped
 
 
 %changelog
 
 
-* Wed Apr 20 2016 06:36:15 +0000  Support <support@fusionio.com> 
+* Tue Jan 31 2017 19:05:08 +0000  Support <support@fusionio.com> 
 
 SanDisk VSL Pinnacles 3.2.4 to 3.2.14 Change Log
 
