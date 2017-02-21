@@ -1106,25 +1106,12 @@ kfio_cpu_t kfio_next_cpu_in_node(kfio_cpu_t last_cpu, kfio_numa_node_t node)
  */
 int kfio_copy_from_user(void *to, const void *from, unsigned len)
 {
-    /*
-     * XXX: Open code copy_from_user to remove check_object_size because the
-     * proprietary binary fails check_object_size.
-     */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,8,0) && defined(CONFIG_X86)
-    int sz = __compiletime_object_size(to);
-
-    might_fault();
-
-    kasan_check_write(to, len);
-
-    if (likely(sz < 0 || sz >= len))
-        len = _copy_from_user(to, from, len);
-    else if (!__builtin_constant_p(len))
-        copy_user_overflow(sz, len);
-    else
-        __bad_copy_user();
-
-    return len;
+    /*
+     * XXX: Avoid check_object_size calls because the proprietary binary
+     * fails check_object_size.
+     */
+    return copy_user_generic(to, (__force void *)from, len);
 #else
     return copy_from_user(to, from, len);
 #endif
@@ -1135,23 +1122,10 @@ int kfio_copy_to_user(void *to, const void *from, unsigned len)
 {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,8,0) && defined(CONFIG_X86)
     /*
-     * XXX: Open code copy_to_user to remove check_object_size because the
-     * proprietary binary fails check_object_size.
+     * XXX: Avoid check_object_size calls because the proprietary binary
+     * fails check_object_size.
      */
-    int sz = __compiletime_object_size(from);
-
-    kasan_check_read(from, len);
-
-    might_fault();
-
-    if (likely(sz < 0 || sz >= len))
-        len = _copy_to_user(to, from, len);
-    else if (!__builtin_constant_p(len))
-        copy_user_overflow(sz, len);
-    else
-        __bad_copy_user();
-
-    return len;
+    return copy_user_generic((__force void *)to, from, len);
 #else
     return copy_to_user(to, from, len);
 #endif
