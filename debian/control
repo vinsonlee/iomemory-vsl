@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Support <support@fusionio.com>
 Build-Depends: debhelper (>= 5), linux-headers | linux-headers-amd64, gcc, make, rsync
 Standards-Version: 3.7.3
-Homepage: http://support.fusionio.com
+Homepage: https://link.sandisk.com/commercialsupport.html
 
 Package: iomemory-vsl
 Architecture: amd64

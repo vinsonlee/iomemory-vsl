@@ -66,12 +66,12 @@ To build a .rpm installation package:
 3. To build an .rpm installation package for the current kernel from a
    .src.rpm, run this command:
 
-       $ rpmbuild --rebuild iomemory-vsl-2.1.0.236-1.0.src.rpm
+       $ rpmbuild --rebuild iomemory-vsl-3.2.15.236-1.0.src.rpm
 
    When using a .src.rpm source package for a non-running kernel, run this
    command:
 
-       $ rpmbuild --rebuild --define 'rpm_kernel_version 2.6.24.4-64.fc8-x86_64'  iomemory-vsl-2.1.0.236-1.0.src.rpm
+       $ rpmbuild --rebuild --define 'rpm_kernel_version 2.6.24.4-64.fc8-x86_64'  iomemory-vsl-3.2.15.236-1.0.src.rpm
 
    The new .rpm package is located in a directory that is indicated in the
    output from the rpmbuild command.  To find it, look for the "Wrote:"
@@ -80,12 +80,12 @@ To build a .rpm installation package:
    output below:
 
        ...
-       Processing files: iomemory-vsl-source-2.1.0.236-1.0
+       Processing files: iomemory-vsl-source-3.2.15.236-1.0
        Requires(rpmlib): rpmlib(PayloadFilesHavePrefix) <= 4.0-1 rpmlib(CompressedFileNames) <= 3.0.4-1
        Obsoletes: iodrive-driver-source
-       Checking for unpackaged file(s): /usr/lib/rpm/check-files /var/tmp/iomemory-vsl-2.1.0.258-root
-       Wrote: /usr/src/redhat/RPMS/x86_64/iomemory-vsl-2.6.18-128.el5-2.1.0.236-1.0.x86_64.rpm
-       Wrote: /usr/src/redhat/RPMS/x86_64/iomemory-vsl-source-2.1.0.236-1.0.x86_64.rpm
+       Checking for unpackaged file(s): /usr/lib/rpm/check-files /var/tmp/iomemory-vsl-3.2.15.258-root
+       Wrote: /usr/src/redhat/RPMS/x86_64/iomemory-vsl-2.6.18-128.el5-3.2.15.236-1.0.x86_64.rpm
+       Wrote: /usr/src/redhat/RPMS/x86_64/iomemory-vsl-source-3.2.15.236-1.0.x86_64.rpm
 
    Make a note of the .rpm location; you will need this information for the installation.
 
@@ -93,7 +93,7 @@ To build a .rpm installation package:
          .tar.bz2 file usinge similar rpmbuild commands to those listed
          above by using "-ta" instead of "--rebuild":
 
-             $ rpmbuild -ta iomemory-vsl-2.1.0.236-1.0.tar.gz
+             $ rpmbuild -ta iomemory-vsl-3.2.15.236-1.0.tar.gz
 
 4. Install the generated driver in conjunction with any additional files
    (fio-util, fio-firmware, etc.) that have been downloaded from
@@ -105,7 +105,7 @@ Building a Debian Installation Package
 
 To build a Debian installation package:
 
-1. Install the prerequisites for building the Fusion-io source driver
+1. Install the prerequisites for building the Fusion source driver
    package (a complete list of dependencies are listed by the
    "Build-Depends" tag in the debian/control file inside the tar):
 
@@ -116,15 +116,15 @@ To build a Debian installation package:
        $ sudo apt-get install gcc rsync
 
 2. Download the driver source file for your target operating system at
-   http://support.fusionio.com
+   https://link.sandisk.com/commercialsupport.html
 
 3. Unpack the driver source file:
 
-       $ tar zxvf iomemory-vsl-source_2.0.1*.tar.gz
+       $ tar zxvf iomemory-vsl-source_3.2.15*.tar.gz
 
 4. Change directory to the folder created in the previous step:
 
-       $ cd iomemory-vsl-source-2.0.1*
+       $ cd iomemory-vsl-source-3.2.15*
 
 5. Begin the driver rebuild:
 
@@ -148,7 +148,7 @@ To build a Debian installation package:
 
 7. Install the generated driver in conjunction with any additional files
    (fio-util, fio-firmware, etc.) that have been downloaded from
-   http://support.fusionio.com.
+   https://link.sandisk.com/commercialsupport.html.
 
 
 Building and Installing for Non-deb and Non-rpm Based Systems
@@ -161,15 +161,15 @@ installing.
 
 1. Ensure that kernel development files are installed.
 
-2. Download the driver source .tar.gz file from http://support.fusionio.com.
+2. Download the driver source .tar.gz file from https://link.sandisk.com/commercialsupport.html.
 
 3. Unpack the driver source file:
 
-       $ tar zxvf iomemory-vsl-source-2.0.1*.tar.gz
+       $ tar zxvf iomemory-vsl-source-3.2.15*.tar.gz
 
    Change directory into the unpacked source:
 
-       $ cd iomemory-vsl-source-2.0.1.*
+       $ cd iomemory-vsl-source-3.2.15.*
 
 4. Build the driver:
 
@@ -192,5 +192,4 @@ installing.
 
 
 ========================================================================
-Copyright (c) 2010, Fusion-io, Inc. (acquired by SanDisk Corp. 2014)
-Copyright (c) 2014 SanDisk Corp. and/or all its affiliates.
+Copyright (c) 2010-2017 Western Digital Corporation or its affiliates.
