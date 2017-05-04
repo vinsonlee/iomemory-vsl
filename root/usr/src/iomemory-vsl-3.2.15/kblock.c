@@ -100,8 +100,10 @@ extern int enable_discard;
 #endif
 
 #if KFIOC_HAS_SEPARATE_OP_FLAGS && !defined(bio_flags)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,10,0)
 // bi_opf defined in kernel 4.8, but bio_flags not defined till 4.9
 #define bio_flags(bio)  ((bio)->bi_opf & ((1 << BIO_OP_SHIFT) - 1))
+#endif
 #endif
 
 #if defined(__VMKLNX__) || KFIOC_HAS_RQ_POS_BYTES == 0
@@ -934,8 +936,13 @@ static void kfio_dump_bio(const char *msg, const struct bio * const bio)
     // Use a local conversion to avoid printf format warnings on some platforms
     sector = (uint64_t)BI_SECTOR(bio);
 #if KFIOC_HAS_SEPARATE_OP_FLAGS
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
+    infprint("%s: sector: %llx: flags: %lx : opf: %x : vcnt: %x", msg,
+             sector, (unsigned long)bio->bi_flags, bio->bi_opf, bio->bi_vcnt);
+#else
     infprint("%s: sector: %llx: flags: %lx : op: %x, op_flags: %x : vcnt: %x", msg,
              sector, (unsigned long)bio->bi_flags, bio_op(bio), bio_flags(bio), bio->bi_vcnt);
+#endif
 #else
     infprint("%s: sector: %llx: flags: %lx : rw: %lx : vcnt: %x", msg,
              sector, (unsigned long)bio->bi_flags, bio->bi_rw, bio->bi_vcnt);
@@ -988,7 +995,11 @@ static inline void kfio_set_comp_cpu(kfio_bio_t *fbio, struct bio *bio)
 static unsigned long __kfio_bio_sync(struct bio *bio)
 {
 #if KFIOC_HAS_SEPARATE_OP_FLAGS
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
+    return bio->bi_opf & REQ_SYNC;
+#else
     return bio_flags(bio) == REQ_SYNC;
+#endif
 #else
 #if KFIOC_HAS_UNIFIED_BLKTYPES
     return bio->bi_rw & REQ_SYNC;
@@ -2355,9 +2366,15 @@ static kfio_bio_t *kfio_request_to_bio(kfio_disk_t *disk, struct request *req,
 #endif
 
 #if KFIOC_HAS_SEPARATE_OP_FLAGS
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
+                errprint("\tbio %p sector %lu size 0x%08x flags 0x%08lx opf 0x%08x\n", lbio,
+                         (unsigned long)BI_SECTOR(lbio), BI_SIZE(lbio), (unsigned long)lbio->bi_flags,
+                         lbio->bi_opf);
+#else
                 errprint("\tbio %p sector %lu size 0x%08x flags 0x%08lx op 0x%04x op_flags 0x%04x\n", lbio,
                          (unsigned long)BI_SECTOR(lbio), BI_SIZE(lbio), (unsigned long)lbio->bi_flags,
                          bio_op(lbio), bio_flags(lbio));
+#endif
 #else
                 errprint("\tbio %p sector %lu size 0x%08x flags 0x%08lx rw 0x%08lx\n", lbio,
                          (unsigned long)BI_SECTOR(lbio), BI_SIZE(lbio), (unsigned long)lbio->bi_flags, lbio->bi_rw);
