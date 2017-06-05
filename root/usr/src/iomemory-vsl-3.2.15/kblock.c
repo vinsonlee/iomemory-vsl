@@ -1940,7 +1940,11 @@ static int complete_list_entries(struct request_queue *q, struct kfio_disk *dp)
     fusion_atomic_list_for_each(entry, tmp, &list)
     {
         req = void_container(entry, struct request, special);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,12,0)
+        kfio_end_request(req, 1);
+#else
         kfio_end_request(req, req->errors < 0 ? req->errors : 1);
+#endif
         completed++;
     }
 
@@ -2218,7 +2222,9 @@ static void kfio_req_completor(kfio_bio_t *fbio, uint64_t bytes_done, int error)
     if (fbio->fbio_cmd == KBIO_CMD_READ || fbio->fbio_cmd == KBIO_CMD_WRITE)
         kfio_sgl_dma_unmap(fbio->fbio_sgl);
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,12,0)
     req->errors = error;
+#endif
 
     if (unlikely(fbio->fbio_flags & KBIO_FLG_DUMP))
     {
@@ -2704,7 +2710,9 @@ kfio_bio_t *kfio_fetch_next_bio(struct kfio_disk *disk)
             fbio = kfio_request_to_bio(disk, creq, true);
             if (fbio == NULL)
             {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,12,0)
                 creq->errors = -EIO;
+#endif
                 kfio_blk_complete_request(creq);
             }
             return fbio;
