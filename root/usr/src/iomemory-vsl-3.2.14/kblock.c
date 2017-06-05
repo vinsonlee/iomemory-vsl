@@ -514,7 +514,9 @@ int kfio_create_disk(struct fio_device *dev, kfio_pci_dev_t *pdev, uint32_t sect
 #if KFIOC_DISCARD_ZEROES_IN_LIMITS == 1
         if (fio_device_ptrim_available(dev))
         {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,12,0)
             rq->limits.discard_zeroes_data = 1;
+#endif
         }
 #endif  /* KFIOC_DISCARD_ZEROES_IN_LIMITS */
 
