@@ -1,4 +1,4 @@
-%define fio_version        3.2.15.1699
+%define fio_version        3.2.15.1700
 %define fio_sysconfdir     /etc
 %define fio_oem_name       fusionio
 %define fio_oem_name_short fio
@@ -335,7 +335,7 @@ Source to build driver for SanDisk Fusion ioMemory devices
 %changelog
 
 
-* Mon Apr 10 2017 18:02:40 +0000  Support <support@fusionio.com> 
+* Tue May 30 2017 21:12:48 +0000  Support <support@fusionio.com> 
 
 SanDisk VSL Pinnacles 3.2.4 to 3.2.14 Change Log
 

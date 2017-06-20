@@ -541,9 +541,13 @@ int kfio_create_disk(struct fio_device *dev, kfio_pci_dev_t *pdev, uint32_t sect
      * Note on REQ_FUA: "strict_sync=1" needs to be set or this is ignored on cards w/o powercut support.
      */
     rq->flush_flags = REQ_FUA | REQ_FLUSH;
+#elif KFIOC_BARRIER_USES_QUEUE_FLAGS
+    queue_flag_set(QUEUE_FLAG_WC, rq);
 #elif KFIOC_BARRIER == 1
     // Ignore if ordered mode is wrong - linux will complain
     blk_queue_ordered(rq, iodrive_barrier_type, kfio_prepare_flush);
+#else
+#error No barrier scheme supported
 #endif
 
 #if KFIOC_QUEUE_HAS_NONROT_FLAG
@@ -2236,6 +2240,11 @@ static inline bool rq_is_empty_flush(const struct request *req)
     {
         return true;
     }
+#elif KFIOC_BARRIER_USES_QUEUE_FLAGS == 1
+    if (blk_rq_bytes(req) == 0 && req_op(req) == REQ_OP_FLUSH)
+    {
+        return true;
+    }
 #elif KFIOC_BARRIER == 1
     if (blk_rq_bytes(req) == 0 && blk_barrier_rq(req))
     {
@@ -2309,7 +2318,7 @@ static kfio_bio_t *kfio_request_to_bio(kfio_disk_t *disk, struct request *req,
 
             fbio->fbio_cmd = KBIO_CMD_WRITE;
 
-#if KFIOC_NEW_BARRIER_SCHEME == 1
+#if KFIOC_NEW_BARRIER_SCHEME == 1 || KFIOC_BARRIER_USES_QUEUE_FLAGS == 1
             sync_write |= req->cmd_flags & REQ_FUA;
 #endif
 
