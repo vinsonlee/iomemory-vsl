@@ -30,6 +30,7 @@
 #include <linux/jiffies.h>
 #include <linux/time.h>
 #include <linux/delay.h>
+#include <linux/version.h>
 #ifndef __KERNEL__
 #include <unistd.h>
 #endif
@@ -157,7 +158,11 @@ KFIO_EXPORT_SYMBOL(fusion_usectohz);
  */
 void noinline fusion_init_timer(struct fusion_timer_list* timer)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0)
+    printk(KERN_WARNING "Unimplemented fusion_init_timer\n");
+#else
     init_timer((struct timer_list *) timer);
+#endif
 }
 KFIO_EXPORT_SYMBOL(fusion_init_timer);
 
@@ -167,7 +172,11 @@ KFIO_EXPORT_SYMBOL(fusion_init_timer);
 void noinline fusion_set_timer_function(struct fusion_timer_list* timer,
     void (*f) (fio_uintptr_t))
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0)
+    printk(KERN_WARNING "Unimplemented fusion_set_timer_function\n");
+#else
     ((struct timer_list *) timer)->function = f;
+#endif
 }
 KFIO_EXPORT_SYMBOL(fusion_set_timer_function);
 
@@ -176,7 +185,11 @@ KFIO_EXPORT_SYMBOL(fusion_set_timer_function);
  */
 void noinline fusion_set_timer_data(struct fusion_timer_list* timer, fio_uintptr_t d)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0)
+    printk(KERN_WARNING "Unimplemented fusion_set_timer_data\n");
+#else
     ((struct timer_list *) timer)->data = d;
+#endif
 }
 KFIO_EXPORT_SYMBOL(fusion_set_timer_data);
 
@@ -185,7 +198,11 @@ KFIO_EXPORT_SYMBOL(fusion_set_timer_data);
  */
 void noinline fusion_set_relative_timer(struct fusion_timer_list* timer, uint64_t t)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0)
+    printk(KERN_WARNING "Unimplemented fusion_set_relative_timer_data\n");
+#else
     mod_timer((struct timer_list *) timer, fusion_get_lbolt() + t);
+#endif
 }
 KFIO_EXPORT_SYMBOL(fusion_set_relative_timer);
 /**
@@ -193,6 +210,10 @@ KFIO_EXPORT_SYMBOL(fusion_set_relative_timer);
  */
 void noinline fusion_del_timer(struct fusion_timer_list* timer)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0)
+    printk(KERN_WARNING "Unimplemented fusion_del_timer\n");
+#else
     del_timer_sync((struct timer_list *) timer);
+#endif
 }
 KFIO_EXPORT_SYMBOL(fusion_del_timer);
