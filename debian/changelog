@@ -1,4 +1,4 @@
-iomemory-vsl (3.2.15.1700-1.0) unstable; urgency=low
+iomemory-vsl (3.2.16.1731-1.0) unstable; urgency=low
 
   * Release.
   * SanDisk VSL Pinnacles 3.2.4 to 3.2.14 Change Log
@@ -695,4 +695,4 @@ iomemory-vsl (3.2.15.1700-1.0) unstable; urgency=low
   * Fixed a resource leak which would lead to soft lockups and reduced performance, when a Linux server was configured to use the intel_iommu. (CRT-100)
 
 
- -- Support <support@fusionio.com>  Tue, 30 May 2017 21:12:48 +0000
+ -- Support <support@fusionio.com>  Wed, 15 Aug 2018 21:06:33 +0000
